@@ -1,4 +1,4 @@
-# Paradise Nursery 🌿
+# e-plantShopping 🌿
 
 A React + Redux shopping cart web application for buying houseplants.
 
