@@ -1,41 +1,97 @@
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addToCart } from "../redux/CartSlice";
-import { useState } from "react";
+import { addItem } from "../redux/CartSlice";
+import Navbar from "./Navbar";
 
-const plants = [
-  { id: 1, name: "Aloe Vera", price: 10, category: "Succulent" },
-  { id: 2, name: "Snake Plant", price: 15, category: "Indoor" },
-  { id: 3, name: "Peace Lily", price: 20, category: "Flowering" },
-  { id: 4, name: "Cactus", price: 12, category: "Succulent" },
-  { id: 5, name: "Fern", price: 18, category: "Indoor" },
-  { id: 6, name: "Rose", price: 25, category: "Flowering" },
-];
+const plants = {
+  Indoor: [
+    {
+      id: 1,
+      name: "Snake Plant",
+      price: 200,
+      image: "https://via.placeholder.com/100",
+    },
+    {
+      id: 2,
+      name: "Peace Lily",
+      price: 250,
+      image: "https://via.placeholder.com/100",
+    },
+  ],
+  Outdoor: [
+    {
+      id: 3,
+      name: "Rose",
+      price: 150,
+      image: "https://via.placeholder.com/100",
+    },
+    {
+      id: 4,
+      name: "Tulip",
+      price: 180,
+      image: "https://via.placeholder.com/100",
+    },
+  ],
+  Succulents: [
+    {
+      id: 5,
+      name: "Aloe Vera",
+      price: 100,
+      image: "https://via.placeholder.com/100",
+    },
+    {
+      id: 6,
+      name: "Cactus",
+      price: 120,
+      image: "https://via.placeholder.com/100",
+    },
+  ],
+};
 
-export default function ProductList() {
+function ProductList() {
   const dispatch = useDispatch();
-  const [added, setAdded] = useState([]);
+  const [added, setAdded] = useState({});
+
+  const handleAdd = (plant) => {
+    dispatch(addItem(plant));
+    setAdded({ ...added, [plant.id]: true });
+  };
 
   return (
     <div>
-      <h2>Plants</h2>
+      {/* ✅ REQUIRED NAVBAR */}
+      <Navbar />
 
-      {plants.map((plant) => (
-        <div key={plant.id} style={{ border: "1px solid #ccc", padding: "10px", margin: "10px" }}>
-          <h3>{plant.name}</h3>
-          <p>Category: {plant.category}</p>
-          <p>Price: ${plant.price}</p>
+      <h2 style={{ textAlign: "center" }}>🌿 Our Plants</h2>
 
-          <button
-            disabled={added.includes(plant.id)}
-            onClick={() => {
-              dispatch(addToCart(plant));
-              setAdded([...added, plant.id]);
-            }}
-          >
-            {added.includes(plant.id) ? "Added" : "Add to Cart"}
-          </button>
+      {Object.keys(plants).map((category) => (
+        <div key={category}>
+          <h3>{category}</h3>
+
+          <div style={{ display: "flex", gap: "20px" }}>
+            {plants[category].map((plant) => (
+              <div key={plant.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
+                
+                {/* ✅ Thumbnail */}
+                <img src={plant.image} alt={plant.name} />
+
+                <h4>{plant.name}</h4>
+                <p>₹{plant.price}</p>
+
+                {/* ✅ Disable after add */}
+                <button
+                  onClick={() => handleAdd(plant)}
+                  disabled={added[plant.id]}
+                >
+                  {added[plant.id] ? "Added" : "Add to Cart"}
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       ))}
     </div>
   );
 }
+
+export default ProductList;

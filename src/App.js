@@ -1,28 +1,33 @@
-import { useState } from "react";
-import Navbar from "./components/Navbar";
+import React, { useState } from "react";
 import ProductList from "./components/ProductList";
-import CartItem from "./components/CartItem";
-import AboutUs from "./components/AboutUs";
-import "./App.css";
+import Navbar from "./components/Navbar";
 
 function App() {
-  const [page, setPage] = useState("home");
+  const [showProducts, setShowProducts] = useState(false);
+
+  // ✅ REQUIRED FUNCTION
+  const handleGetStartedClick = () => {
+    setShowProducts(true);
+  };
 
   return (
-    <>
-      <Navbar setPage={setPage} />
+    <div>
+      <Navbar />
 
-      {page === "home" && (
-        <div className="home">
+      {!showProducts ? (
+        <div style={{ textAlign: "center", marginTop: "100px" }}>
           <h1>🌿 Paradise Nursery</h1>
-          <button onClick={() => setPage("plants")}>Get Started</button>
-        </div>
-      )}
+          <p>Welcome to the best plant shop 🌱</p>
 
-      {page === "about" && <AboutUs />}
-      {page === "plants" && <ProductList />}
-      {page === "cart" && <CartItem setPage={setPage} />}
-    </>
+          {/* ✅ Button using required function */}
+          <button onClick={handleGetStartedClick}>
+            Get Started
+          </button>
+        </div>
+      ) : (
+        <ProductList />
+      )}
+    </div>
   );
 }
 
